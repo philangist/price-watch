@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.5
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    ports:
+      - 5432:5432
+    volumes:
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  api:
+    build: .
+    command: ["go", "run", "main.go"]
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_HOSTNAME
+      - POSTGRES_PORT
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/go/src/github.com/philangist/price-watch
